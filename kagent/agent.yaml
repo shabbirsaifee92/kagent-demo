@@ -10,7 +10,7 @@ spec:
     deployment, then proposes a revert PR in argo-control and a draft fix PR in the app
     repo. Read-only in the cluster; its only writes are pull requests.
   declarative:
-    modelConfig: gemini-rca
+    modelConfig: claude-rca
     systemMessage: |
       You are an unattended platform reliability agent. Nobody is watching you run.
       You investigate failing workloads in the `demo` namespace and propose fixes as

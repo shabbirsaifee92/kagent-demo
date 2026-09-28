@@ -1,0 +1,14 @@
+# The devtools MCP pod builds and deploys throwaway releases, so it gets
+# cluster-admin. The SA itself is created by kmcp and named after the MCPServer.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devtools-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: devtools
+    namespace: kagent

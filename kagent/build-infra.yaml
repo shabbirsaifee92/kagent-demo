@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: build
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: registry, namespace: build}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: registry}}
+  template:
+    metadata: {labels: {app: registry}}
+    spec:
+      containers:
+        - name: registry
+          image: registry:2
+          ports: [{containerPort: 5000}]
+          env:
+            - {name: REGISTRY_STORAGE_DELETE_ENABLED, value: "true"}
+          volumeMounts: [{name: data, mountPath: /var/lib/registry}]
+      volumes: [{name: data, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata: {name: registry, namespace: build}
+spec:
+  selector: {app: registry}
+  ports: [{port: 5000, targetPort: 5000}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: buildkitd, namespace: build}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: buildkitd}}
+  template:
+    metadata: {labels: {app: buildkitd}}
+    spec:
+      containers:
+        - name: buildkitd
+          image: moby/buildkit:v0.17.2-rootless
+          args:
+            - --addr=tcp://0.0.0.0:1234
+            - --oci-worker-no-process-sandbox
+          ports: [{containerPort: 1234}]
+          securityContext:
+            seccompProfile: {type: Unconfined}
+            appArmorProfile: {type: Unconfined}
+            runAsUser: 1000
+            runAsGroup: 1000
+          volumeMounts: [{name: buildkitd, mountPath: /home/user/.local/share/buildkit}]
+      volumes: [{name: buildkitd, emptyDir: {}}]
+---
+apiVersion: v1
+kind: Service
+metadata: {name: buildkitd, namespace: build}
+spec:
+  selector: {app: buildkitd}
+  ports: [{port: 1234, targetPort: 1234}]

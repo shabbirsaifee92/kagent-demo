@@ -11,5 +11,6 @@ spec:
     args:
       - stdio
       - --toolsets=repos,pull_requests
+      - --enable-command-logging
     secretRefs:
       - name: github-pat

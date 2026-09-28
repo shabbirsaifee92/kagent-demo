@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtools-workspace
+  namespace: kagent
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: devtools
+  namespace: kagent
+spec:
+  transportType: stdio
+  deployment:
+    image: devtools-mcp:0.3.0
+    imagePullPolicy: IfNotPresent
+    cmd: python
+    args: ["-u", "/server.py"]
+    env:
+      WORKSPACE: /workspace
+      GIT_AUTHOR_NAME: kagent-dev-agent
+      GIT_AUTHOR_EMAIL: kagent-dev-agent@users.noreply.github.com
+      GIT_COMMITTER_NAME: kagent-dev-agent
+      GIT_COMMITTER_EMAIL: kagent-dev-agent@users.noreply.github.com
+    secretRefs:
+      - name: github-pat
+    volumes:
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: devtools-workspace
+    volumeMounts:
+      - name: workspace
+        mountPath: /workspace
