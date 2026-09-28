@@ -5,10 +5,19 @@ import logging
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
+
+
+def connect_cache(url):
+    """Resolve the configured cache backend."""
+    scheme = url.split("://", 1)[0] if "://" in url else ""
+    if scheme not in ("redis", "memcached"):
+        raise ValueError(f"unsupported cache backend: {scheme!r}")
+    log.info("cache backend resolved scheme=%s", scheme)
+    return scheme
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -31,6 +40,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     port = int(os.environ.get("PORT", "8080"))
     log.info("starting demo-app version=%s port=%d", VERSION, port)
+    connect_cache(os.environ.get("CACHE_URL", ""))
     HTTPServer(("0.0.0.0", port), Handler).serve_forever()
 
 

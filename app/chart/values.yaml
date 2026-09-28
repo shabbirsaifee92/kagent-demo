@@ -2,8 +2,11 @@ replicaCount: 2
 
 image:
   repository: demo-app
-  tag: "1.4.0"
+  tag: "1.5.0"
   pullPolicy: IfNotPresent
+
+cache:
+  enabled: true
 
 service:
   type: ClusterIP
