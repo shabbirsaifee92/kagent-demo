@@ -1,0 +1,6 @@
+{
+  "name": "platform-ops",
+  "version": "0.1.0",
+  "description": "Unattended platform operations skills: workload root-cause analysis, argo-control promotion and revert PRs, and application-repo fix PRs.",
+  "keywords": ["kubernetes", "argocd", "helm", "rca", "gitops"]
+}
