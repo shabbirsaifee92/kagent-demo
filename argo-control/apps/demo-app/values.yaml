@@ -1,0 +1,14 @@
+# Environment values for demo-app (dev).
+# Owned by the platform team. Image tag promotions land here.
+replicaCount: 2
+
+image:
+  tag: "1.4.0"
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

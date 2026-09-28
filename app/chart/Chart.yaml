@@ -1,0 +1,6 @@
+apiVersion: v2
+name: demo-app
+description: Base Helm chart for demo-app, owned by the application team.
+type: application
+version: 1.4.0
+appVersion: "1.4.0"
