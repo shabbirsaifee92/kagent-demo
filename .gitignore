@@ -1,0 +1,6 @@
+# never commit credentials
+*.pat
+*token*
+*secret*
+.env
+.env.*
