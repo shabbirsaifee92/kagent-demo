@@ -7,6 +7,7 @@ image:
 
 cache:
   enabled: true
+  url: "redis://localhost:6379"
 
 service:
   type: ClusterIP
@@ -15,8 +16,8 @@ service:
 
 resources:
   requests:
-    cpu: 10m
     memory: 64Mi
+    cpu: 10m
   limits:
-    cpu: 200m
     memory: 128Mi
+    cpu: 200m
