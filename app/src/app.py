@@ -10,8 +10,8 @@ VERSION = "1.5.0"
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("demo-app")
 
-BUTTON_COLOR = "#2563eb"
-BUTTON_LABEL = "Refresh status"
+BUTTON_COLOR = "#22c55e"
+BUTTON_LABEL = "Check status"
 
 
 def connect_cache(url):

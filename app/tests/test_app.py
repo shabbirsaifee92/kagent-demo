@@ -31,3 +31,9 @@ class TestRenderPage:
         html = app.render_page("1.0.0", "redis")
         assert app.BUTTON_LABEL in html
         assert app.BUTTON_COLOR in html
+
+    def test_button_color_is_green(self):
+        assert app.BUTTON_COLOR == "#22c55e"
+
+    def test_button_label_is_check_status(self):
+        assert app.BUTTON_LABEL == "Check status"
