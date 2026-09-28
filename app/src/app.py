@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-"""demo-app - a minimal HTTP service used by the kagent POC."""
-import json
 import logging
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -12,7 +9,15 @@ log = logging.getLogger("demo-app")
 
 
 def connect_cache(url):
-    """Resolve the configured cache backend."""
+    """Resolve the configured cache backend.
+    
+    If url is empty, logs a warning and returns None (no caching).
+    Otherwise validates that the URL has a supported scheme (redis or memcached).
+    """
+    if not url or not url.strip():
+        log.warning("cache backend not configured, running without caching")
+        return None
+    
     scheme = url.split("://", 1)[0] if "://" in url else ""
     if scheme not in ("redis", "memcached"):
         raise ValueError(f"unsupported cache backend: {scheme!r}")
@@ -23,18 +28,16 @@ def connect_cache(url):
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/healthz":
-            body = {"status": "ok", "version": VERSION}
+            self.send_response(200)
+            self.send_header("Content-type", "text/plain")
+            self.end_headers()
+            self.wfile.write(b"OK")
         else:
-            body = {"service": "demo-app", "version": VERSION}
-        payload = json.dumps(body).encode()
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+            self.send_response(404)
+            self.end_headers()
 
     def log_message(self, fmt, *args):
-        log.info("%s - %s", self.address_string(), fmt % args)
+        log.info(fmt, *args)
 
 
 def main():
