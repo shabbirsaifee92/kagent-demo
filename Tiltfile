@@ -7,8 +7,6 @@
 #   tilt ci   one-shot: build, deploy, wait for green, exit. Use this in agents/CI.
 #   tilt up   interactive watch loop. Use this at a workstation.
 
-load('ext://helm_resource', 'helm_resource')
-
 REGISTRY = os.getenv('REGISTRY', 'registry.build.svc:5000')
 NAMESPACE = os.getenv('TILT_NAMESPACE', 'dev-sandbox')
 IMAGE = REGISTRY + '/demo-app'
