@@ -31,3 +31,11 @@ class TestRenderPage:
         html = app.render_page("1.0.0", "redis")
         assert app.BUTTON_LABEL in html
         assert app.BUTTON_COLOR in html
+
+
+class TestChartDefaults:
+    def test_app_starts_when_cache_url_is_empty(self):
+        cache = app.connect_cache("")
+        assert cache is None
+        page = app.render_page(app.VERSION, cache)
+        assert "disabled" in page
