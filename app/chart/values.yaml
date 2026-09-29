@@ -6,8 +6,7 @@ image:
   pullPolicy: IfNotPresent
 
 cache:
-  enabled: true
-  url: ""
+  enabled: false
 
 service:
   type: ClusterIP
